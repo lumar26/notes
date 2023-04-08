@@ -1,0 +1,7 @@
+Greška:
+
+UnsupportedOperationException on immutable list
+
+'List.of()'  vraća listu koja je nepromenljiva, pa nad tom listom ne može da se izvrši add ili remove operacija.
+
+Ukoliko nam treba promenljiva lista onda treba da koristimo neku od implementacija sqa 'new': 'new ArrrayList()'

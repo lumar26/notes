@@ -1,0 +1,9 @@
+TS2786: 'Tree' cannot be used as a JSX component.   
+Its instance type 'Tree' is not a valid JSX element.    
+ Type 'Tree' is missing the following properties from type 'ElementClass': context, setState, forceUpdate, props, refs
+
+ova greška se javila pri uvozu biblioteke rect-d3-tree, kad hoću da iskoristim običnu kompnentu <Tree /> .
+
+
+
+Prvo ali ne pravo rešenje je da ne koristim typescript za tu komponentu gde koristim <Tree />.

@@ -1,0 +1,20 @@
+Javljao se problem da kad odradim dispatch akcije u nekoj komponenti nisam znao kako da pokupim ono što je vraćeno sa -- thunkAPI.rehjectWithValue --
+
+Poenta je da rejectWithValue ne baca izuzetak koji bi mofao da se uhvati u .catch() bloku, već je to isto obična vrednost.
+
+Caka je da se ta vrednost hvata takođe u .then() ali kao drugi argument
+
+
+ dispatch(showFullTree(tree.id))
+            .then(
+                () => navigate("/trees/display"),  // onFulfilled
+                error => dispatch(setNotification({type: "error", message: error}))) -- // onRejected
+
+
+U slučaju da ovaj pristup ne radi, tj. u slice.ts se desi rejected akcija ali .then() se ipak ona prepozna kao onfulfiled, tada je rešenje da se u slice.ts baci ta greška kako bi mogla u komponenti da se uhvati u .catch() bloku
+
+ .addCase(getFullFamilyTree.rejected, (state, action) => {
+                state.selectedFullTree = null
+                state.loading = "failed"
+                throw action.payload  // ovde bacamo ono što nam je vraćeno sa rejectWithValue
+            })

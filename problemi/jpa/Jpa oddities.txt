@@ -1,0 +1,5 @@
+Čudna stvar se dešava sa EmbeddedId anotacijom. Ukoliko se ne instancira u trenutku deklaracije odmah baca grešku: Could not set field value [7] value by reflection, a bazična greška je NullPointerException
+
+Van svake zdrave pameti je da se odmah instancira ali jedino tako radi.
+
+Greška liči na to da ne može da koristi setter metodu za id, što i jeste tačno jer ni ja ne mogu ručno to da uradim. Reko bih da anotacija embeddableId to sprečava

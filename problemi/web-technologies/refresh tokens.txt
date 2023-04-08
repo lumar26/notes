@@ -1,0 +1,17 @@
+Da li koristiti refresh tokene i kako:
+
+
+It only makes sense to use a refresh anycodings_authentication token, if you can protect it in a way anycodings_authentication that is different from the access token. anycodings_authentication If they are stored the same on the anycodings_authentication client, there is very little benefit anycodings_authentication (there is some, related to TLS anycodings_authentication vulnerabilities, but probably not so anycodings_authentication much that would support implementing a anycodings_authentication separate refresh token).
+
+So this is the reason the refresh token anycodings_authentication is usually stored in a http only cookie, anycodings_authentication so that it's protected from XSS. The anycodings_authentication access token could also be best stored anycodings_authentication that way, but then you would not be able anycodings_authentication to send it to different origins.
+
+Revocation is a different question. You anycodings_authentication cannot revoke truly stateless tokens, so anycodings_authentication if you need token revocation, you will anycodings_authentication have to implement a stateful solution. anycodings_authentication This can be with or without refresh anycodings_authentication tokens, from the statelessness anycodings_authentication perspective it doesn't matter which one anycodings_authentication you revoke.
+
+So, while you should always consider anycodings_authentication your own threat model (what threats do anycodings_authentication you want to mitigate to what extent, and anycodings_authentication how), as a basic rule of thumb, you anycodings_authentication should
+
+Implement a plain old stateful session with only a session id sent to the client (not tokens of any kind) if you don't need statelessness (most applications actually don't need this), AND you always just send the token to its origin (you don't have single sign-on or similar where the token obtained from something like an identity provider or auth server is used on different services).
+Implement access tokens stored in httpOnly cookies if you really need to be truly stateless, but you don't have a separate identity/authentication server or single sign-on and you always just send the token to its origin.
+Implement short-lived access tokens stored by Javascript (eg. in localStorage) with longer-lived refresh tokens stored or a session id stored in a httpOnly cookie for the authentication/identity provider if you need single sign-on / federated identity, OR if you have multiple services that will consume your access token. In this case you can still consider longer-lived access tokens without a refresh token, but you will be running the risk of a compromised token with attackers having more time to actually use them. You can try to mitigate this with revocation, but the thing is, you likely won't notice in time, so I'd consider that a weak mitigation. And a medium complexity Javascript app will likely be vulnerable to XSS (regardless of the framework used, but some are more likely).
+So how long an expiry time you would anycodings_authentication want to accept for your access tokens anycodings_authentication entirely depends on your exact use-case anycodings_authentication and your risk appetite - but it's anycodings_authentication important you make an informed decision.
+
+

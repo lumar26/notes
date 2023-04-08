@@ -1,0 +1,11 @@
+Failed to load configuration
+
+Greška na putanji http://localhost:8080/swagger-ui/index.html
+
+Potrebno je da se doda konfiguracija za swagger u SpringSecurityConfig i to na sledeći način:
+
+                httpSecurity.antMatchers("/swagger-ui/**", "/v3/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+Nema potrebe za metodom web.ignoring....
+Očigledno je swaggeru potrebno da pristupi svim ovim putanjama prilikom kreiranja dokumentacije
+

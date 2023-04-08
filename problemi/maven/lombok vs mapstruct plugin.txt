@@ -1,0 +1,68 @@
+Problem je nastao pri maven clean insall, compilation error jer Lombok i MapStruct ne znaju da rade zajedno jer se oba plug-in-a oslanjaju na predprocesiranje tako da je potrebo da se odradi sledeće
+
+
+***************************************************************************************************
+StackOverflow answer
+***************************************************************************************************
+
+The reason why it does not work is because Maven only uses the MapStruct processor and not the Lombok one. The annotationProcessorPaths tells maven which processors it should use.
+
+The delombok does nothing as you are ending up with 2 files per class and I think that the maven compiler does not see them.
+
+You have 2 options:
+
+Option 1: Add the lombok dependency in the annotationProcessorPaths
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.6.1</version>
+    <configuration>
+        <source>${java.version}</source>
+        <target>${java.version}</target>
+        <annotationProcessorPaths>
+            <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${org.projectlombok.version}</version>
+            </path>
+            <!-- This is needed when using Lombok 1.18.16 and above -->
+            <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>0.2.0</version>
+            </path>
+            <!-- Mapstruct should follow the lombok path(s) -->
+            <path>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
+</plugin>
+Option 2:
+
+Add the mapstruct-processor dependency to your dependencies and remove the annotationProcessorPaths. This way the maven compiler will pick up all the annotation processors that are in your dependencies.
+
+I would advise in using Option 1, as with that you can be certain that you are not using some MapStruct transitive dependencies and internal classes in your code.
+
+Edit:
+
+To make sure that the IntelliJ annotation processing also works you will have to add the mapstruct-processor as a provided dependency due to IDEA-150621. IntelliJ in the moment does not use the annotationProcessorPaths from Maven to configure the project correctly.
+
+Edit 2:
+
+Add information and comment about lombok-mapstruct-binding needed from Lombok 1.18.16.
+
+***************************************************************************************************
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% SOLUTION %%%%%%%%%%%%%%%%%%%%%%%%
+
+Rešenje: dodao sam samo novi dependency za mapstruct-processor kako ne bih morao da dodajem novi path u annotationProcessorsPath
+
+%%%%%%%%%%%%%%%%%%%%%%%% -------- %%%%%%%%%%%%%%%%%%%%%%%%
+
+
+

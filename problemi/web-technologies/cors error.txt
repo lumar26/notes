@@ -1,0 +1,21 @@
+Dešava se sledeća greška:
+
+########################################################################
+
+Access to XMLHttpRequest at 'http://localhost:8080/api/stages/1' from origin 'http://localhost:8100' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+########################################################################
+
+
+###
+
+Objašnjenje CORS-a:
+
+CORS is a browser mechanism that asks webserver if it is willing to accept request from specific origin. Origin is your hostname + port, meaning localhost:3000, localhost:4200 and localhost:8000 are all different origins.
+
+You can either configure header Access-Control-Allow-Origin on your backend side to accept requests from 'localhost:3000', or you can start your react application on port :4200, since it is already accepted by your backend, or you can use proxy that will make requests to backend from server side.
+
+In production environment you usually have backend and frontend working on same origin, so proxy is a good way to solve CORS problems during development. You also can setup some reverse proxy, like nginx, so your backend and frontend would both be on same origin.
+
+###
+
